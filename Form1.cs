@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Threading;
 using BR.AN.PviServices;
 
+
 namespace BRCommTest
 {
     public partial class Form1 : Form
@@ -20,13 +21,16 @@ namespace BRCommTest
         BR.AN.PviServices.Variable BRVariable;
         BR.AN.PviServices.Variable AxisX1ActVal;
         BR.AN.PviServices.Variable varHMI;
-
+        
 
         bool PviConnectionIsOk;
+
+        ClassPlcVars PLC;
 
         public Form1()
         {
             InitializeComponent();
+            PLC = new ClassPlcVars();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -68,68 +72,96 @@ namespace BRCommTest
         {
             PviConnectionIsOk = true;
             lblStatus.Text = ((Cpu)sender).Name + " connected";
+            tmrReadPlcVal.Start();
+            //if (varHMI == null)
+            //{
+            //    varHMI = new Variable(BRCpu, "HMI");
+            //    varHMI.Active = true;
+            //    varHMI.Connect();
+            //    varHMI.ValueChanged += new VariableEventHandler(HMI_ValueChanged);
+            //}
+            //tmrAssignToPlc.Start();
         }
 
-        private void tmrAxisX1_Tick(object sender, EventArgs e)
+       
+        private void HMI_ValueChanged(object sender, VariableEventArgs e)
         {
+            //varHMI.Active = false;
+            Variable tmpVar = (Variable)sender;
+            txtActPosAxisX1.Text = (string)tmpVar.Value["Axis[1].ActPos"];
+            //HMI.StartMachine = (bool)tmpVar.Value["StartMachine"]; //HMI.StartMachine
+            //HMI.AxisX1Enabled = (bool)tmpVar.Value["AxisX1.Enabled"]; //HMI.AxisX1.Enabled
+            //MessageBox.Show(HMI.StartMachine.ToString() + HMI.AxisX1Enabled.ToString());
 
         }
 
-        private void btnJogPlus_Click(object sender, EventArgs e)
+        private void btnJogPlusX1_MouseDown(object sender, MouseEventArgs e)
         {
-            tmrReadPlc.Start();
+            PLC.HMI.Axis[1].JogPlus = true;
         }
 
-        private void tmrReadPlc_Tick(object sender, EventArgs e)
+        private void btnJogPlusX1_MouseUp(object sender, MouseEventArgs e)
         {
-            tmrReadPlc.Stop();
-            if (BRVariable == null)
-            {
-                BRVariable = new Variable(BRCpu, "count");
-                BRVariable.Active = true;
-                BRVariable.Connect();
-                BRVariable.ValueChanged += new VariableEventHandler(BRVariable_ValueChanged);
-            }
-            
+            PLC.HMI.Axis[1].JogPlus = false;
+        }
+
+        private void tmrAssignToPlc_Tick(object sender, EventArgs e)
+        {
+            tmrAssignToPlc.Stop();
+
+            varHMI.Value["Axis[1].JogPlus"] = PLC.HMI.Axis[1].JogPlus;
+
+            tmrAssignToPlc.Start();
+        }
+
+        private void tmrReadPlcVal_Tick(object sender, EventArgs e)
+        {
+            tmrReadPlcVal.Stop();
+
             if (varHMI == null)
             {
                 varHMI = new Variable(BRCpu, "HMI");
-                varHMI.Active = true;
-                varHMI.Connect();
-                varHMI.ValueChanged += new VariableEventHandler(VarHMI_ValueChanged);
+                varHMI.ValueRead += new PviEventHandler(VarHMI_ValueRead);
+                varHMI.WriteValueAutomatic = false;
             }
-            //HMI = new Variable(BRCpu, "count");
-            //HMI.Connect();
-            //HMI.ValueChanged += new VariableEventHandler(HMI_ValueChanged);
-            //tmrReadPlc.Start();
+            varHMI.ReadValue();
+            varHMI.Connect();
         }
 
-        private void BRVariable_ValueChanged(object sender, VariableEventArgs e)
+        private void VarHMI_ValueRead(object sender, PviEventArgs e)
         {
             Variable tmpVar = (Variable)sender;
-            lblStatus.Text = tmpVar.Value.ToString();
+            try
+            {
+                PLC.HMI.Axis[1].ActPos = (float)tmpVar.Value["Axis[1].ActPos"];
+            }
+            catch
+            { }
+            txtActPosAxisX1.Text = PLC.HMI.Axis[1].ActPos.ToString();
+
+            tmpVar.Value["Axis[1].JogPlus"] = PLC.HMI.Axis[1].JogPlus;
+
+            varHMI.WriteValue();
+
+            tmrReadPlcVal.Start();
         }
 
-        private void VarHMI_ValueChanged(object sender, VariableEventArgs e)
-        {
-            Variable tmpVar = (Variable)sender;
-            HMI.StartMachine = (bool)tmpVar.Value["StartMachine"]; //HMI.StartMachine
-            HMI.AxisX1Enabled = (bool)tmpVar.Value["AxisX1.Enabled"]; //HMI.AxisX1.Enabled
-            MessageBox.Show(HMI.StartMachine.ToString() + HMI.AxisX1Enabled.ToString());
-        }
 
-        private void HMI_ValueChanged(object sender, VariableEventArgs e)
-        {
-            Variable tmpVar = (Variable)sender;
-            MessageBox.Show(tmpVar.Value.ToString());
-        }
 
-        public struct T_Hmi
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            public bool StartMachine;
-            public bool AxisX1Enabled;
+            try
+            {
+                if (varHMI.IsConnected)
+                    varHMI.Disconnect();
+                if (BRCpu.IsConnected)
+                    BRCpu.Disconnect();
+                if (BRService.IsConnected)
+                    BRService.Disconnect();
+            }
+            catch
+            {}
+
         }
-        T_Hmi HMI;
-        
     }
 }

@@ -24,9 +24,21 @@ namespace BRCommTest
 
         public struct T_HmiAxis
         {
+            //from PLC
             public float ActPos;
             public bool Enabled;
+
+            //to PLC
+            public bool Reset;
+
             public bool JogPlus;
+            public bool JogMinus;
+            public double JogVelo;
+
+            public double SetPos;
+            public double SetVelo;
+            public bool MoveSetPos;
+
         }
 
 

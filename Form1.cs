@@ -26,16 +26,18 @@ namespace BRCommTest
         bool PviConnectionIsOk;
 
         ClassPlcVars PLC;
+        ClassBuRPlcComm BuRPlcComm;
 
         public Form1()
         {
             InitializeComponent();
             PLC = new ClassPlcVars();
+            BuRPlcComm = new ClassBuRPlcComm();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            tmrWaitFormLoad.Start();
+            //tmrWaitFormLoad.Start();
         }
 
         private void tmrWaitFormLoad_Tick(object sender, EventArgs e)
@@ -95,21 +97,13 @@ namespace BRCommTest
 
         }
 
-        private void btnJogPlusX1_MouseDown(object sender, MouseEventArgs e)
-        {
-            PLC.HMI.Axis[1].JogPlus = true;
-        }
-
-        private void btnJogPlusX1_MouseUp(object sender, MouseEventArgs e)
-        {
-            PLC.HMI.Axis[1].JogPlus = false;
-        }
+        
 
         private void tmrAssignToPlc_Tick(object sender, EventArgs e)
         {
             tmrAssignToPlc.Stop();
 
-            varHMI.Value["Axis[1].JogPlus"] = PLC.HMI.Axis[1].JogPlus;
+            varHMI.Value["Axis[0].JogPlus"] = PLC.HMI.Axis[1].JogPlus;
 
             tmrAssignToPlc.Start();
         }
@@ -133,15 +127,29 @@ namespace BRCommTest
             Variable tmpVar = (Variable)sender;
             try
             {
-                PLC.HMI.Axis[1].ActPos = (float)tmpVar.Value["Axis[1].ActPos"];
+                PLC.HMI.Axis[0].ActPos = (float)tmpVar.Value["Axis[0].ActPos"];
+                PLC.HMI.Axis[0].Enabled = (bool)tmpVar.Value["Axis[0].Enabled"];
             }
             catch
             { }
-            txtActPosAxisX1.Text = PLC.HMI.Axis[1].ActPos.ToString();
 
-            tmpVar.Value["Axis[1].JogPlus"] = PLC.HMI.Axis[1].JogPlus;
+            txtActPosAxisX1.Text = PLC.HMI.Axis[0].ActPos.ToString();
+            chkEnabledAxisX1.Checked = PLC.HMI.Axis[0].Enabled;
 
-            varHMI.WriteValue();
+            try
+            {
+                tmpVar.Value["Axis[0].Reset"] = PLC.HMI.Axis[0].Reset;
+                tmpVar.Value["Axis[0].JogPlus"] = PLC.HMI.Axis[0].JogPlus;
+                tmpVar.Value["Axis[0].JogMinus"] = PLC.HMI.Axis[0].JogMinus;
+                tmpVar.Value["Axis[0].JogVelo"] = PLC.HMI.Axis[0].JogVelo;
+                tmpVar.Value["Axis[0].SetPos"] = PLC.HMI.Axis[0].SetPos;
+                tmpVar.Value["Axis[0].SetVelo"] = PLC.HMI.Axis[0].SetVelo;
+                tmpVar.Value["Axis[0].MoveSetPos"] = PLC.HMI.Axis[0].MoveSetPos;
+
+                varHMI.WriteValue();
+            }
+            catch
+            { }
 
             tmrReadPlcVal.Start();
         }
@@ -152,16 +160,69 @@ namespace BRCommTest
         {
             try
             {
-                if (varHMI.IsConnected)
+                if (varHMI != null && varHMI.IsConnected)
                     varHMI.Disconnect();
-                if (BRCpu.IsConnected)
+                if (BRCpu != null && BRCpu.IsConnected)
                     BRCpu.Disconnect();
-                if (BRService.IsConnected)
+                if (BRService != null && BRService.IsConnected)
                     BRService.Disconnect();
             }
             catch
             {}
 
         }
+
+        private void btnMovePosAxisX1_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void btnJogPlusX1_MouseDown(object sender, MouseEventArgs e)
+        {
+            PLC.HMI.Axis[0].JogVelo = Convert.ToDouble(txtMoveVeloAxisX1.Text);
+            PLC.HMI.Axis[0].JogPlus = PLC.HMI.Axis[0].Enabled;
+        }
+
+        private void btnJogPlusX1_MouseUp(object sender, MouseEventArgs e)
+        {
+            PLC.HMI.Axis[0].JogVelo = Convert.ToDouble(txtMoveVeloAxisX1.Text);
+            PLC.HMI.Axis[0].JogPlus = false;
+        }
+
+        private void btnJogMinAxisX1_MouseDown(object sender, MouseEventArgs e)
+        {
+            PLC.HMI.Axis[0].JogVelo = Convert.ToDouble(txtMoveVeloAxisX1.Text);
+            PLC.HMI.Axis[0].JogMinus = PLC.HMI.Axis[0].Enabled;
+        }
+
+        private void btnJogMinAxisX1_MouseUp(object sender, MouseEventArgs e)
+        {
+            PLC.HMI.Axis[0].JogVelo = Convert.ToDouble(txtMoveVeloAxisX1.Text);
+            PLC.HMI.Axis[0].JogMinus = false;
+        }
+
+        private void btnResetAxisX1_MouseDown(object sender, MouseEventArgs e)
+        {
+            PLC.HMI.Axis[0].Reset = true;
+        }
+
+        private void btnResetAxisX1_MouseUp(object sender, MouseEventArgs e)
+        {
+            PLC.HMI.Axis[0].Reset = false;
+        }
+
+        private void btnMovePosAxisX1_MouseDown(object sender, MouseEventArgs e)
+        {
+            PLC.HMI.Axis[0].SetVelo = Convert.ToDouble(txtMoveVeloAxisX1.Text);
+            PLC.HMI.Axis[0].SetPos = Convert.ToDouble(txtGoToPosAxisX1.Text);
+            PLC.HMI.Axis[0].MoveSetPos = PLC.HMI.Axis[0].Enabled;
+        }
+
+        private void btnStopAxisX1_Click(object sender, EventArgs e)
+        {
+            PLC.HMI.Axis[0].MoveSetPos = false;
+        }
+
+
     }
 }

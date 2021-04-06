@@ -113,8 +113,8 @@ namespace BRCommTest
         private void VarHMI_ValueChanged(object sender, VariableEventArgs e)
         {
             Variable tmpVar = (Variable)sender;
-            HMI.StartMachine = (bool)tmpVar.Value["StartMachine"];
-            HMI.AxisX1Enabled = (bool)tmpVar.Value["AxisX1.Enabled"];
+            HMI.StartMachine = (bool)tmpVar.Value["StartMachine"]; //HMI.StartMachine
+            HMI.AxisX1Enabled = (bool)tmpVar.Value["AxisX1.Enabled"]; //HMI.AxisX1.Enabled
             MessageBox.Show(HMI.StartMachine.ToString() + HMI.AxisX1Enabled.ToString());
         }
 

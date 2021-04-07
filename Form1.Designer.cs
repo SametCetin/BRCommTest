@@ -79,6 +79,7 @@ namespace BRCommTest
             this.btnStopAxisX1.TabIndex = 13;
             this.btnStopAxisX1.Text = "STOP";
             this.btnStopAxisX1.UseVisualStyleBackColor = true;
+            this.btnStopAxisX1.Click += new System.EventHandler(this.btnStopAxisX1_Click);
             // 
             // label3
             // 

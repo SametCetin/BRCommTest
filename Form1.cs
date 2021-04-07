@@ -100,7 +100,14 @@ namespace BRCommTest
 
         private void btnMovePosAxisX1_Click(object sender, EventArgs e)
         {
+            PlcComm.Vars.HMI.Axis[0].SetPos = Convert.ToDouble(txtGoToPosAxisX1.Text);
+            PlcComm.Vars.HMI.Axis[0].SetVelo = Convert.ToDouble(txtMoveVeloAxisX1.Text);
+            PlcComm.Vars.HMI.Axis[0].MoveSetPos = PlcComm.Vars.HMI.Axis[0].Enabled && !PlcComm.Vars.HMI.Axis[0].MoveSetPos;
+        }
 
+        private void btnStopAxisX1_Click(object sender, EventArgs e)
+        {
+            PlcComm.Vars.HMI.Axis[0].MoveSetPos = false;
         }
     }
 }

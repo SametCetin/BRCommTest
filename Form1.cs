@@ -14,7 +14,7 @@ namespace BRCommTest
 {
     public partial class Form1 : Form
     {
-        ClassBuRPlcComm PlcComm;
+        public ClassBuRPlcComm PlcComm;
 
         public Form1()
         {
@@ -90,6 +90,12 @@ namespace BRCommTest
         private void btnResetAxisX1_MouseUp(object sender, MouseEventArgs e)
         {
             PlcComm.Vars.HMI.Axis[0].Reset = false;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Form2 frm = new Form2(this);
+            frm.Show();
         }
     }
 }

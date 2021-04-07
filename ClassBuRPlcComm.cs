@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace BRCommTest
 {
-    class ClassBuRPlcComm
+    public class ClassBuRPlcComm
     {
         public ClassPlcVars Vars; //Plc variables
 

@@ -36,3 +36,4 @@ E:\Repo\BRCommTest\obj\Debug\BRCommTest.csproj.CopyComplete
 E:\Repo\BRCommTest\obj\Debug\BRCommTest.exe
 E:\Repo\BRCommTest\obj\Debug\BRCommTest.pdb
 E:\Repo\BRCommTest\obj\Debug\BRCommTest.csprojAssemblyReference.cache
+E:\Repo\BRCommTest\obj\Debug\BRCommTest.Form2.resources

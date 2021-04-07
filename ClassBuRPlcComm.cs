@@ -20,7 +20,7 @@ namespace BRCommTest
         private void InitializeComponent()
         {
             tmrPlcSync = new System.Windows.Forms.Timer();
-            tmrPlcSync.Interval = 100;
+            tmrPlcSync.Interval = 40;
             tmrPlcSync.Tick += TmrPlcSync_Tick;
 
             Vars = new ClassPlcVars();

@@ -148,6 +148,7 @@ namespace BRCommTest
             this.btnMovePosAxisX1.TabIndex = 6;
             this.btnMovePosAxisX1.Text = "MOVE";
             this.btnMovePosAxisX1.UseVisualStyleBackColor = true;
+            this.btnMovePosAxisX1.Click += new System.EventHandler(this.btnMovePosAxisX1_Click);
             // 
             // txtMoveVeloAxisX1
             // 

@@ -97,5 +97,10 @@ namespace BRCommTest
             Form2 frm = new Form2(this);
             frm.Show();
         }
+
+        private void btnMovePosAxisX1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

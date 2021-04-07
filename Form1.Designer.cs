@@ -31,22 +31,21 @@ namespace BRCommTest
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnStopAxisX1 = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnResetAxisX1 = new System.Windows.Forms.Button();
+            this.btnJogMinAxisX1 = new System.Windows.Forms.Button();
+            this.chkEnabledAxisX1 = new System.Windows.Forms.CheckBox();
+            this.btnMovePosAxisX1 = new System.Windows.Forms.Button();
+            this.txtMoveVeloAxisX1 = new System.Windows.Forms.TextBox();
+            this.txtGoToPosAxisX1 = new System.Windows.Forms.TextBox();
             this.txtActPosAxisX1 = new System.Windows.Forms.TextBox();
             this.btnJogPlusX1 = new System.Windows.Forms.Button();
             this.lblStatus = new System.Windows.Forms.Label();
             this.tmrWaitFormLoad = new System.Windows.Forms.Timer(this.components);
-            this.tmrAssignToPlc = new System.Windows.Forms.Timer(this.components);
-            this.tmrReadPlcVal = new System.Windows.Forms.Timer(this.components);
-            this.txtGoToPosAxisX1 = new System.Windows.Forms.TextBox();
-            this.txtMoveVeloAxisX1 = new System.Windows.Forms.TextBox();
-            this.btnMovePosAxisX1 = new System.Windows.Forms.Button();
-            this.chkEnabledAxisX1 = new System.Windows.Forms.CheckBox();
-            this.btnJogMinAxisX1 = new System.Windows.Forms.Button();
-            this.btnResetAxisX1 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.btnStopAxisX1 = new System.Windows.Forms.Button();
+            this.tmrVisuUpdate = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -70,6 +69,104 @@ namespace BRCommTest
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "AxisX1";
+            // 
+            // btnStopAxisX1
+            // 
+            this.btnStopAxisX1.Location = new System.Drawing.Point(72, 140);
+            this.btnStopAxisX1.Name = "btnStopAxisX1";
+            this.btnStopAxisX1.Size = new System.Drawing.Size(60, 40);
+            this.btnStopAxisX1.TabIndex = 13;
+            this.btnStopAxisX1.Text = "STOP";
+            this.btnStopAxisX1.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(137, 37);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(58, 13);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "Actuel Pos";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(137, 70);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(55, 13);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "Move Pos";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(137, 102);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(39, 13);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "mm/sn";
+            // 
+            // btnResetAxisX1
+            // 
+            this.btnResetAxisX1.Location = new System.Drawing.Point(250, 186);
+            this.btnResetAxisX1.Name = "btnResetAxisX1";
+            this.btnResetAxisX1.Size = new System.Drawing.Size(60, 40);
+            this.btnResetAxisX1.TabIndex = 9;
+            this.btnResetAxisX1.Text = "RST";
+            this.btnResetAxisX1.UseVisualStyleBackColor = true;
+            this.btnResetAxisX1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnResetAxisX1_MouseDown);
+            this.btnResetAxisX1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnResetAxisX1_MouseUp);
+            // 
+            // btnJogMinAxisX1
+            // 
+            this.btnJogMinAxisX1.Location = new System.Drawing.Point(6, 186);
+            this.btnJogMinAxisX1.Name = "btnJogMinAxisX1";
+            this.btnJogMinAxisX1.Size = new System.Drawing.Size(60, 40);
+            this.btnJogMinAxisX1.TabIndex = 8;
+            this.btnJogMinAxisX1.Text = "JOG -";
+            this.btnJogMinAxisX1.UseVisualStyleBackColor = true;
+            this.btnJogMinAxisX1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnJogMinAxisX1_MouseDown);
+            this.btnJogMinAxisX1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnJogMinAxisX1_MouseUp);
+            // 
+            // chkEnabledAxisX1
+            // 
+            this.chkEnabledAxisX1.AutoSize = true;
+            this.chkEnabledAxisX1.Enabled = false;
+            this.chkEnabledAxisX1.Location = new System.Drawing.Point(250, 19);
+            this.chkEnabledAxisX1.Name = "chkEnabledAxisX1";
+            this.chkEnabledAxisX1.Size = new System.Drawing.Size(68, 17);
+            this.chkEnabledAxisX1.TabIndex = 7;
+            this.chkEnabledAxisX1.Text = "Powered";
+            this.chkEnabledAxisX1.UseVisualStyleBackColor = true;
+            // 
+            // btnMovePosAxisX1
+            // 
+            this.btnMovePosAxisX1.Location = new System.Drawing.Point(6, 140);
+            this.btnMovePosAxisX1.Name = "btnMovePosAxisX1";
+            this.btnMovePosAxisX1.Size = new System.Drawing.Size(60, 40);
+            this.btnMovePosAxisX1.TabIndex = 6;
+            this.btnMovePosAxisX1.Text = "MOVE";
+            this.btnMovePosAxisX1.UseVisualStyleBackColor = true;
+            // 
+            // txtMoveVeloAxisX1
+            // 
+            this.txtMoveVeloAxisX1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.txtMoveVeloAxisX1.Location = new System.Drawing.Point(16, 94);
+            this.txtMoveVeloAxisX1.Name = "txtMoveVeloAxisX1";
+            this.txtMoveVeloAxisX1.Size = new System.Drawing.Size(115, 26);
+            this.txtMoveVeloAxisX1.TabIndex = 3;
+            this.txtMoveVeloAxisX1.Text = "10";
+            this.txtMoveVeloAxisX1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // txtGoToPosAxisX1
+            // 
+            this.txtGoToPosAxisX1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.txtGoToPosAxisX1.Location = new System.Drawing.Point(16, 62);
+            this.txtGoToPosAxisX1.Name = "txtGoToPosAxisX1";
+            this.txtGoToPosAxisX1.Size = new System.Drawing.Size(115, 26);
+            this.txtGoToPosAxisX1.TabIndex = 2;
+            this.txtGoToPosAxisX1.Text = "100";
+            this.txtGoToPosAxisX1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // txtActPosAxisX1
             // 
@@ -106,114 +203,9 @@ namespace BRCommTest
             this.tmrWaitFormLoad.Interval = 3000;
             this.tmrWaitFormLoad.Tick += new System.EventHandler(this.tmrWaitFormLoad_Tick);
             // 
-            // tmrAssignToPlc
+            // tmrVisuUpdate
             // 
-            this.tmrAssignToPlc.Tick += new System.EventHandler(this.tmrAssignToPlc_Tick);
-            // 
-            // tmrReadPlcVal
-            // 
-            this.tmrReadPlcVal.Tick += new System.EventHandler(this.tmrReadPlcVal_Tick);
-            // 
-            // txtGoToPosAxisX1
-            // 
-            this.txtGoToPosAxisX1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.txtGoToPosAxisX1.Location = new System.Drawing.Point(16, 62);
-            this.txtGoToPosAxisX1.Name = "txtGoToPosAxisX1";
-            this.txtGoToPosAxisX1.Size = new System.Drawing.Size(115, 26);
-            this.txtGoToPosAxisX1.TabIndex = 2;
-            this.txtGoToPosAxisX1.Text = "100";
-            this.txtGoToPosAxisX1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // txtMoveVeloAxisX1
-            // 
-            this.txtMoveVeloAxisX1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.txtMoveVeloAxisX1.Location = new System.Drawing.Point(16, 94);
-            this.txtMoveVeloAxisX1.Name = "txtMoveVeloAxisX1";
-            this.txtMoveVeloAxisX1.Size = new System.Drawing.Size(115, 26);
-            this.txtMoveVeloAxisX1.TabIndex = 3;
-            this.txtMoveVeloAxisX1.Text = "10";
-            this.txtMoveVeloAxisX1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // btnMovePosAxisX1
-            // 
-            this.btnMovePosAxisX1.Location = new System.Drawing.Point(6, 140);
-            this.btnMovePosAxisX1.Name = "btnMovePosAxisX1";
-            this.btnMovePosAxisX1.Size = new System.Drawing.Size(60, 40);
-            this.btnMovePosAxisX1.TabIndex = 6;
-            this.btnMovePosAxisX1.Text = "MOVE";
-            this.btnMovePosAxisX1.UseVisualStyleBackColor = true;
-            this.btnMovePosAxisX1.Click += new System.EventHandler(this.btnMovePosAxisX1_Click);
-            this.btnMovePosAxisX1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovePosAxisX1_MouseDown);
-            // 
-            // chkEnabledAxisX1
-            // 
-            this.chkEnabledAxisX1.AutoSize = true;
-            this.chkEnabledAxisX1.Enabled = false;
-            this.chkEnabledAxisX1.Location = new System.Drawing.Point(250, 19);
-            this.chkEnabledAxisX1.Name = "chkEnabledAxisX1";
-            this.chkEnabledAxisX1.Size = new System.Drawing.Size(68, 17);
-            this.chkEnabledAxisX1.TabIndex = 7;
-            this.chkEnabledAxisX1.Text = "Powered";
-            this.chkEnabledAxisX1.UseVisualStyleBackColor = true;
-            // 
-            // btnJogMinAxisX1
-            // 
-            this.btnJogMinAxisX1.Location = new System.Drawing.Point(6, 186);
-            this.btnJogMinAxisX1.Name = "btnJogMinAxisX1";
-            this.btnJogMinAxisX1.Size = new System.Drawing.Size(60, 40);
-            this.btnJogMinAxisX1.TabIndex = 8;
-            this.btnJogMinAxisX1.Text = "JOG -";
-            this.btnJogMinAxisX1.UseVisualStyleBackColor = true;
-            this.btnJogMinAxisX1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnJogMinAxisX1_MouseDown);
-            this.btnJogMinAxisX1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnJogMinAxisX1_MouseUp);
-            // 
-            // btnResetAxisX1
-            // 
-            this.btnResetAxisX1.Location = new System.Drawing.Point(250, 186);
-            this.btnResetAxisX1.Name = "btnResetAxisX1";
-            this.btnResetAxisX1.Size = new System.Drawing.Size(60, 40);
-            this.btnResetAxisX1.TabIndex = 9;
-            this.btnResetAxisX1.Text = "RST";
-            this.btnResetAxisX1.UseVisualStyleBackColor = true;
-            this.btnResetAxisX1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnResetAxisX1_MouseDown);
-            this.btnResetAxisX1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnResetAxisX1_MouseUp);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(137, 102);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 13);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "mm/sn";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(137, 70);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(55, 13);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "Move Pos";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(137, 37);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(58, 13);
-            this.label3.TabIndex = 12;
-            this.label3.Text = "Actuel Pos";
-            // 
-            // btnStopAxisX1
-            // 
-            this.btnStopAxisX1.Location = new System.Drawing.Point(72, 140);
-            this.btnStopAxisX1.Name = "btnStopAxisX1";
-            this.btnStopAxisX1.Size = new System.Drawing.Size(60, 40);
-            this.btnStopAxisX1.TabIndex = 13;
-            this.btnStopAxisX1.Text = "STOP";
-            this.btnStopAxisX1.UseVisualStyleBackColor = true;
-            this.btnStopAxisX1.Click += new System.EventHandler(this.btnStopAxisX1_Click);
+            this.tmrVisuUpdate.Tick += new System.EventHandler(this.tmrVisuUpdate_Tick);
             // 
             // Form1
             // 
@@ -224,7 +216,6 @@ namespace BRCommTest
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
             this.Text = "Form1";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -239,8 +230,6 @@ namespace BRCommTest
         private System.Windows.Forms.Button btnJogPlusX1;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Timer tmrWaitFormLoad;
-        private System.Windows.Forms.Timer tmrAssignToPlc;
-        private System.Windows.Forms.Timer tmrReadPlcVal;
         private System.Windows.Forms.TextBox txtGoToPosAxisX1;
         private System.Windows.Forms.TextBox txtMoveVeloAxisX1;
         private System.Windows.Forms.Button btnMovePosAxisX1;
@@ -251,6 +240,7 @@ namespace BRCommTest
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnStopAxisX1;
+        private System.Windows.Forms.Timer tmrVisuUpdate;
     }
 }
 

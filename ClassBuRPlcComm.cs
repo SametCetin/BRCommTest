@@ -1,48 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using BR.AN.PviServices;
+using System;
 using System.Threading;
-using System.Threading.Tasks;
-using BR.AN.PviServices;
 
 
 namespace BRCommTest
 {
     class ClassBuRPlcComm
     {
-        System.Windows.Forms.Timer tmrWaitFornConn;
+        public ClassPlcVars Vars; //Plc variables
+
         System.Windows.Forms.Timer tmrPlcSync;
 
         BR.AN.PviServices.Service BRService;
         BR.AN.PviServices.Cpu BRCpu;
+        BR.AN.PviServices.Variable BRPlcVar;
+
+        string DestAddress = "127.0.0.1";
 
         private void InitializeComponent()
         {
-            tmrWaitFornConn = new System.Windows.Forms.Timer();
-            tmrWaitFornConn.Interval = 3000;
-            tmrWaitFornConn.Tick += TmrWaitFornConn_Tick;
-
             tmrPlcSync = new System.Windows.Forms.Timer();
             tmrPlcSync.Interval = 100;
             tmrPlcSync.Tick += TmrPlcSync_Tick;
-        }
 
-        
+            Vars = new ClassPlcVars();
+        }
 
         public ClassBuRPlcComm()
         {
             InitializeComponent();
-            tmrWaitFornConn.Start();
-
         }
 
         ~ClassBuRPlcComm()
         {
             try
             {
-                if (varHMI != null && varHMI.IsConnected)
-                    varHMI.Disconnect();
+                if (BRPlcVar != null && BRPlcVar.IsConnected)
+                    BRPlcVar.Disconnect();
                 if (BRCpu != null && BRCpu.IsConnected)
                     BRCpu.Disconnect();
                 if (BRService != null && BRService.IsConnected)
@@ -51,14 +45,14 @@ namespace BRCommTest
             catch
             { }
         }
-
-        private void TmrWaitFornConn_Tick(object sender, EventArgs e)
+        
+        public void ConnectToPvi(string destAddress)
         {
-            tmrWaitFornConn.Stop();
-            ConnectToPvi();
+            DestAddress = destAddress;
+            ConnectToService();
         }
 
-        void ConnectToPvi()
+        private void ConnectToService()
         {
             if (BRService == null)
             {
@@ -74,7 +68,7 @@ namespace BRCommTest
             {
                 BRCpu = new Cpu(BRService, "cpu");
                 BRCpu.Connection.DeviceType = DeviceType.ANSLTcp;
-                BRCpu.Connection.ANSLTcp.DestinationIpAddress = "127.0.0.1";
+                BRCpu.Connection.ANSLTcp.DestinationIpAddress = DestAddress;
                 BRCpu.Connected += new PviEventHandler(BRCpu_Connected);
             }
             BRCpu.Connect();
@@ -85,10 +79,64 @@ namespace BRCommTest
             tmrPlcSync.Start();
         }
 
+        public bool CheckConnection()
+        {
+            if (BRPlcVar == null)
+                return false;
+
+            return BRPlcVar.IsConnected;
+        }
+
         private void TmrPlcSync_Tick(object sender, EventArgs e)
         {
             tmrPlcSync.Stop();
-            System.Windows.Forms.MessageBox.Show("timerSync");
+
+            if (BRPlcVar == null)
+            {
+                BRPlcVar = new Variable(BRCpu, "HMI");
+                BRPlcVar.ValueRead += new PviEventHandler(BRPlcVar_ValueRead);
+                BRPlcVar.WriteValueAutomatic = false;
+            }
+            BRPlcVar.ReadValue();
+            BRPlcVar.Connect();
+        }
+
+        private void BRPlcVar_ValueRead(object sender, PviEventArgs e)
+        {
+            Variable tmpVar = (Variable)sender;
+            try
+            {
+                Vars.HMI.Axis[0].ActPos = (float)tmpVar.Value["Axis[0].ActPos"];
+                Vars.HMI.Axis[0].Enabled = (bool)tmpVar.Value["Axis[0].Enabled"];
+            }
+            catch
+            { }
+
+            try
+            {
+                tmpVar.Value["Axis[0].Reset"] = Vars.HMI.Axis[0].Reset;
+                tmpVar.Value["Axis[0].JogPlus"] = Vars.HMI.Axis[0].JogPlus;
+                tmpVar.Value["Axis[0].JogMinus"] = Vars.HMI.Axis[0].JogMinus;
+                tmpVar.Value["Axis[0].JogVelo"] = Vars.HMI.Axis[0].JogVelo;
+                tmpVar.Value["Axis[0].SetPos"] = Vars.HMI.Axis[0].SetPos;
+                tmpVar.Value["Axis[0].SetVelo"] = Vars.HMI.Axis[0].SetVelo;
+                tmpVar.Value["Axis[0].MoveSetPos"] = Vars.HMI.Axis[0].MoveSetPos;
+
+                BRPlcVar.WriteValue();
+            }
+            catch
+            { }
+
+            tmrPlcSync.Start();
+        }
+
+        private void Wait(int ms)
+        {
+            for (int i=0; i<ms; i++)
+            {
+                Thread.Sleep(1);
+                System.Windows.Forms.Application.DoEvents();
+            }
         }
 
     }

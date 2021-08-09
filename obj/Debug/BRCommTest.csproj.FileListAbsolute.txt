@@ -29,10 +29,10 @@ E:\Repo\BRCommTest\bin\Debug\System.Text.Encodings.Web.xml
 E:\Repo\BRCommTest\bin\Debug\System.Threading.Tasks.Extensions.xml
 E:\Repo\BRCommTest\bin\Debug\System.ValueTuple.xml
 E:\Repo\BRCommTest\obj\Debug\BRCommTest.Form1.resources
+E:\Repo\BRCommTest\obj\Debug\BRCommTest.Form2.resources
 E:\Repo\BRCommTest\obj\Debug\BRCommTest.Properties.Resources.resources
 E:\Repo\BRCommTest\obj\Debug\BRCommTest.csproj.GenerateResource.cache
 E:\Repo\BRCommTest\obj\Debug\BRCommTest.csproj.CoreCompileInputs.cache
 E:\Repo\BRCommTest\obj\Debug\BRCommTest.csproj.CopyComplete
 E:\Repo\BRCommTest\obj\Debug\BRCommTest.exe
 E:\Repo\BRCommTest\obj\Debug\BRCommTest.pdb
-E:\Repo\BRCommTest\obj\Debug\BRCommTest.Form2.resources

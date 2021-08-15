@@ -25,7 +25,7 @@ namespace BRCommTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            lblStatus.Text = mainForm.PlcComm.Vars.HMI.Axis[0].ActPos.ToString();
+            
         }
     }
 }

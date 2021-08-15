@@ -1,5 +1,7 @@
 ﻿using BR.AN.PviServices;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,54 +9,93 @@ namespace BRCommTest
 {
     public class ClassBuRPlcComm
     {
-        public ClassPlcVars Vars; //Plc variables
-        public string PlcValue;
+        bool ReadValDoneUint;
+        UInt16 ReadValUint;
+        BR.AN.PviServices.Variable BRPlcVarUint;
+        TaskCompletionSource<bool> tcsReadUint = null;
+        System.Windows.Forms.Timer tmrReadValToutUint;
 
-        System.Windows.Forms.Timer tmrPlcSync;
+        bool ReadValDoneLreal;
+        double ReadValLreal;
+        BR.AN.PviServices.Variable BRPlcVarLreal;
+        TaskCompletionSource<bool> tcsReadLreal = null;
+        System.Windows.Forms.Timer tmrReadValToutLreal;
+
+
+        System.Windows.Forms.Timer tmrConnectPviTimeOut;
+        System.Windows.Forms.Timer tmrWriteToPlcTimeOut;
+
+        bool WaitConnectToPvi;
+        bool ConnectToPviDone;
+
+        bool WaitWriteToPlc;
+        bool WriteToPlcDone;
+        
+        string DestAddress = "127.0.0.1";
+        string PlcVarVal = "";
 
         BR.AN.PviServices.Service BRService;
         BR.AN.PviServices.Cpu BRCpu;
-        BR.AN.PviServices.Variable BRPlcVar;
-
-        string DestAddress = "127.0.0.1";
-
-        private void InitializeComponent()
-        {
-            tmrPlcSync = new System.Windows.Forms.Timer();
-            tmrPlcSync.Interval = 40;
-            tmrPlcSync.Tick += TmrPlcSync_Tick;
-
-            Vars = new ClassPlcVars();
-        }
+        
+        BR.AN.PviServices.Variable BRPlcVarWr;
 
         public ClassBuRPlcComm()
         {
-            InitializeComponent();
         }
 
         ~ClassBuRPlcComm()
         {
             try
             {
-                if (BRPlcVar != null && BRPlcVar.IsConnected)
-                    BRPlcVar.Disconnect();
-                if (BRCpu != null && BRCpu.IsConnected)
+                if (BRPlcVarUint != null)
+                    BRPlcVarUint.Disconnect();
+                if (tmrReadValToutUint != null)
+                    tmrReadValToutUint.Stop();
+
+                if (BRPlcVarLreal != null)
+                    BRPlcVarLreal.Disconnect();
+                if (tmrReadValToutLreal != null)
+                    tmrReadValToutUint.Stop();
+
+                if (BRPlcVarWr != null)
+                    BRPlcVarWr.Disconnect();
+                if (BRCpu != null)
                     BRCpu.Disconnect();
-                if (BRService != null && BRService.IsConnected)
+                if (BRService != null)
                     BRService.Disconnect();
+
+
             }
             catch
             { }
         }
 
-        TaskCompletionSource<bool> tcsPlcConnection = null;
-        public async void ConnectToPvi(string destAddress)
+        public bool ConnectToPvi(string destAddress)
         {
+            tmrConnectPviTimeOut = new System.Windows.Forms.Timer();
+            tmrConnectPviTimeOut.Tick += tmrConnectPviTimeOut_Tick;
+            tmrConnectPviTimeOut.Interval = 8000;
+            tmrConnectPviTimeOut.Start();
+
             DestAddress = destAddress;
             ConnectToService();
 
-            tcsPlcConnection = new TaskCompletionSource<bool>();
-            await tcsPlcConnection.Task;
+            WaitConnectToPvi = true;
+            while (WaitConnectToPvi)
+            {
+                Thread.Sleep(10);
+                System.Windows.Forms.Application.DoEvents();
+            }
+
+            tmrConnectPviTimeOut.Stop();
+
+            return ConnectToPviDone;
+
+        }
+
+        private void tmrConnectPviTimeOut_Tick(object sender, EventArgs e)
+        {
+            WaitConnectToPvi = false;
         }
 
         private void ConnectToService()
@@ -81,7 +122,8 @@ namespace BRCommTest
 
         void BRCpu_Connected(object sender, PviEventArgs e)
         {
-            tcsPlcConnection?.TrySetResult(true);
+            ConnectToPviDone = true;
+            WaitConnectToPvi = false;
         }
 
         public bool CheckConnection()
@@ -92,88 +134,221 @@ namespace BRCommTest
             return BRCpu.IsConnected;
         }
 
-        private void TmrPlcSync_Tick(object sender, EventArgs e)
+        //----------------------------------------
+        // UINT okuma
+        //----------------------------------------
+        public async System.Threading.Tasks.Task<(bool, UInt16)> ReadUint(string VarName)
         {
-            tmrPlcSync.Stop();
+            ReadValUint = 0;
+            ReadValDoneUint = false;
 
-            //if (BRPlcVar == null)
-            //{
-            //    BRPlcVar = new Variable(BRCpu, "HMI");
-            //    BRPlcVar.ValueRead += new PviEventHandler(BRPlcVar_ValueRead);
-            //    BRPlcVar.WriteValueAutomatic = false;
-            //}
-            //BRPlcVar.ReadValue();
-            //BRPlcVar.Connect();
-        }
-
-        //private void BRPlcVar_ValueRead(object sender, PviEventArgs e)
-        //{
-        //    Variable tmpVar = (Variable)sender;
-        //    try
-        //    {
-        //        Vars.HMI.Axis[0].ActPos = (float)tmpVar.Value["Axis[0].ActPos"];
-        //        Vars.HMI.Axis[0].Enabled = (bool)tmpVar.Value["Axis[0].Enabled"];
-        //    }
-        //    catch
-        //    { }
-
-        //    try
-        //    {
-        //        tmpVar.Value["Axis[0].Reset"] = Vars.HMI.Axis[0].Reset;
-        //        tmpVar.Value["Axis[0].JogPlus"] = Vars.HMI.Axis[0].JogPlus;
-        //        tmpVar.Value["Axis[0].JogMinus"] = Vars.HMI.Axis[0].JogMinus;
-        //        tmpVar.Value["Axis[0].JogVelo"] = Vars.HMI.Axis[0].JogVelo;
-        //        tmpVar.Value["Axis[0].SetPos"] = Vars.HMI.Axis[0].SetPos;
-        //        tmpVar.Value["Axis[0].SetVelo"] = Vars.HMI.Axis[0].SetVelo;
-        //        tmpVar.Value["Axis[0].MoveSetPos"] = Vars.HMI.Axis[0].MoveSetPos;
-
-        //        BRPlcVar.WriteValue();
-        //    }
-        //    catch
-        //    { }
-
-        //    tmrPlcSync.Start();
-        //}
-
-        private void Wait(int ms)
-        {
-            for (int i = 0; i < ms; i++)
-            {
-                Thread.Sleep(1);
-                System.Windows.Forms.Application.DoEvents();
-            }
-        }
-
-        bool WaitReadVar;
-        public void Read(string VarName)
-        {
             if (BRCpu == null)
-                return;
+                return (false, ReadValUint);
 
-            BRPlcVar = new Variable(BRCpu, VarName);
-            BRPlcVar.ValueRead += new PviEventHandler(BRPlcVar_ValueRead);
-            BRPlcVar.ReadValue();
-            BRPlcVar.Connect();
-
-            WaitReadVar = true;
-            while (WaitReadVar)
+            try
             {
-                Thread.Sleep(1);
-                System.Windows.Forms.Application.DoEvents();
+                BRPlcVarUint = new Variable(BRCpu, VarName);
+                BRPlcVarUint.ValueRead += new PviEventHandler(BRPlcVarUint_ValueRead);
+                BRPlcVarUint.Error += new PviEventHandler(BRPlcVarUint_Error);
+                BRPlcVarUint.ReadValue();
+                BRPlcVarUint.Connect();
+            }
+            catch
+            {
+                return (false, ReadValUint);
             }
 
-            BRPlcVar.Disconnect();
-            BRPlcVar.Dispose();
-            BRPlcVar = null;
+            tmrReadValToutUint = new System.Windows.Forms.Timer();
+            tmrReadValToutUint.Tick += tmrReadValToutUint_tick;
+            tmrReadValToutUint.Interval = 2000;
+            tmrReadValToutUint.Start();
+
+            tcsReadUint = new TaskCompletionSource<bool>();
+            await tcsReadUint.Task;
+
+            if (BRPlcVarUint != null)
+            {
+                BRPlcVarUint.Disconnect();
+                BRPlcVarUint.Dispose();
+            }
+            BRPlcVarUint = null;
+
+            return (ReadValDoneUint, ReadValUint);
         }
 
-        private void BRPlcVar_ValueRead(object sender, PviEventArgs e)
+        private void BRPlcVarUint_ValueRead(object sender, PviEventArgs e)
         {
+            tmrReadValToutUint.Stop();
             Variable tmpVar = (Variable)sender;
-            PlcValue = tmpVar.Value.ToString();
-            WaitReadVar = false;
+            ReadValUint = tmpVar.Value;
+            ReadValDoneUint = true;
+            tcsReadUint?.TrySetResult(true);
         }
 
+        private void BRPlcVarUint_Error(object sender, PviEventArgs e)
+        {
+            tmrReadValToutUint.Stop();
+            tcsReadUint?.TrySetResult(true);
+        }
+
+        private void tmrReadValToutUint_tick(object sender, EventArgs e)
+        {
+            tmrReadValToutUint.Stop();
+            tcsReadUint?.TrySetResult(true);
+        }
+
+        //----------------------------------------
+        // LREAL okuma
+        //----------------------------------------
+        public async System.Threading.Tasks.Task<(bool, Double)> ReadLreal(string VarName)
+        {
+            ReadValLreal = 0;
+            ReadValDoneLreal = false;
+
+            if (BRCpu == null)
+                return (ReadValDoneLreal, ReadValLreal);
+
+            try
+            {
+                BRPlcVarLreal = new Variable(BRCpu, VarName);
+                BRPlcVarLreal.ValueRead += new PviEventHandler(BRPlcVarLreal_ValueRead);
+                BRPlcVarLreal.Error += new PviEventHandler(BRPlcVarLreal_Error);
+                BRPlcVarLreal.ReadValue();
+                BRPlcVarLreal.Connect();
+            }
+            catch
+            {
+                return (ReadValDoneLreal, ReadValLreal);
+            }
+
+            tmrReadValToutLreal = new System.Windows.Forms.Timer();
+            tmrReadValToutLreal.Tick += tmrReadValToutLreal_tick;
+            tmrReadValToutLreal.Interval = 2000;
+            tmrReadValToutLreal.Start();
+
+            tcsReadLreal = new TaskCompletionSource<bool>();
+            await tcsReadLreal.Task;
+
+            if (BRPlcVarLreal != null)
+            {
+                BRPlcVarLreal.Disconnect();
+                BRPlcVarLreal.Dispose();
+            }
+            BRPlcVarLreal = null;
+
+            return (ReadValDoneLreal, ReadValLreal);
+        }
+
+        private void BRPlcVarLreal_ValueRead(object sender, PviEventArgs e)
+        {
+            tmrReadValToutLreal.Stop();
+            Variable tmpVar = (Variable)sender;
+            ReadValLreal = tmpVar.Value;
+            ReadValDoneLreal = true;
+            tcsReadLreal?.TrySetResult(true);
+        }
+
+        private void BRPlcVarLreal_Error(object sender, PviEventArgs e)
+        {
+            tmrReadValToutLreal.Stop();
+            tcsReadLreal?.TrySetResult(true);
+        }
+
+        private void tmrReadValToutLreal_tick(object sender, EventArgs e)
+        {
+            tmrReadValToutLreal.Stop();
+            tcsReadLreal?.TrySetResult(true);
+        }
+        //----------------------------------------
+        // LREAL okuma
+        //----------------------------------------
+        //public async System.Threading.Tasks.Task<(bool, double)> ReadLreal(string VarName)
+        //{
+        //    PlcVarVal = "0";
+        //    double readVal = 0;
+        //    if (BRCpu == null)
+        //    {
+        //        return readVal;
+        //    }
+        //    setupVariable(VarName);
+        //    tcs = new TaskCompletionSource<bool>();
+        //    await tcs.Task;
+        //    readVal = Convert.ToDouble(PlcVarVal);
+        //    disconnectVariable();
+        //    return readVal;
+        //}
+        //-------------------------------------------
+
+        private void setupVariableWr(string VarName)
+        {
+            try
+            {
+                tmrWriteToPlcTimeOut = new System.Windows.Forms.Timer();
+                tmrWriteToPlcTimeOut.Tick += tmrWriteToPlcTimeOut_tick;
+                tmrWriteToPlcTimeOut.Interval = 2000;
+                tmrWriteToPlcTimeOut.Start();
+
+                BRPlcVarWr = new Variable(BRCpu, VarName);
+                BRPlcVarWr.ValueWritten += new PviEventHandler(BRPlcVarWr_ValueWritten);
+                BRPlcVarWr.Error += new PviEventHandler(BRPlcVarWr_Error);
+                BRPlcVarWr.ReadValue();
+                BRPlcVarWr.Connect();
+
+                WriteToPlcDone = false;
+                WaitWriteToPlc = true;
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void disconnectVariableWr()
+        {
+            tmrWriteToPlcTimeOut.Stop();
+
+            BRPlcVarWr.Disconnect();
+            BRPlcVarWr.Dispose();
+            BRPlcVarWr = null;
+        }
+
+        public bool Write(string varName)
+        {
+            if (BRCpu == null || BRPlcVarWr != null)
+            {
+                return false;
+            }
+
+            setupVariableWr(varName);
+
+            BRPlcVarWr.WriteValue();
+
+            while (WaitWriteToPlc)
+            {
+                Thread.Sleep(10);
+                //System.Windows.Forms.Application.DoEvents();
+            }
+
+            disconnectVariableWr();
+
+            return WriteToPlcDone;
+        }
+
+        private void BRPlcVarWr_ValueWritten(object sender, PviEventArgs e)
+        {
+            WriteToPlcDone = true;
+            WaitWriteToPlc = false;
+        }
+
+        private void BRPlcVarWr_Error(object sender, PviEventArgs e)
+        {
+            WaitWriteToPlc = false;
+        }
+
+        private void tmrWriteToPlcTimeOut_tick(object sender, EventArgs e)
+        {
+            WaitWriteToPlc = false;
+        }
 
     }
 }

@@ -30,7 +30,7 @@ namespace BRCommTest
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.gbxAxisX1 = new System.Windows.Forms.GroupBox();
             this.btnStopAxisX1 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -50,31 +50,45 @@ namespace BRCommTest
             this.button2 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btnStructReader = new System.Windows.Forms.Button();
-            this.groupBox1.SuspendLayout();
+            this.gbxAxisX2 = new System.Windows.Forms.GroupBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.button6 = new System.Windows.Forms.Button();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txtActPosAxisX2 = new System.Windows.Forms.TextBox();
+            this.button7 = new System.Windows.Forms.Button();
+            this.gbxAxisX1.SuspendLayout();
+            this.gbxAxisX2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // groupBox1
+            // gbxAxisX1
             // 
-            this.groupBox1.Controls.Add(this.btnStopAxisX1);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.btnResetAxisX1);
-            this.groupBox1.Controls.Add(this.btnJogMinAxisX1);
-            this.groupBox1.Controls.Add(this.chkEnabledAxisX1);
-            this.groupBox1.Controls.Add(this.btnMovePosAxisX1);
-            this.groupBox1.Controls.Add(this.txtMoveVeloAxisX1);
-            this.groupBox1.Controls.Add(this.txtGoToPosAxisX1);
-            this.groupBox1.Controls.Add(this.txtActPosAxisX1);
-            this.groupBox1.Controls.Add(this.btnJogPlusX1);
-            this.groupBox1.Location = new System.Drawing.Point(494, 19);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBox1.Size = new System.Drawing.Size(482, 358);
-            this.groupBox1.TabIndex = 4;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "AxisX1";
+            this.gbxAxisX1.Controls.Add(this.btnStopAxisX1);
+            this.gbxAxisX1.Controls.Add(this.label3);
+            this.gbxAxisX1.Controls.Add(this.label2);
+            this.gbxAxisX1.Controls.Add(this.label1);
+            this.gbxAxisX1.Controls.Add(this.btnResetAxisX1);
+            this.gbxAxisX1.Controls.Add(this.btnJogMinAxisX1);
+            this.gbxAxisX1.Controls.Add(this.chkEnabledAxisX1);
+            this.gbxAxisX1.Controls.Add(this.btnMovePosAxisX1);
+            this.gbxAxisX1.Controls.Add(this.txtMoveVeloAxisX1);
+            this.gbxAxisX1.Controls.Add(this.txtGoToPosAxisX1);
+            this.gbxAxisX1.Controls.Add(this.txtActPosAxisX1);
+            this.gbxAxisX1.Controls.Add(this.btnJogPlusX1);
+            this.gbxAxisX1.Location = new System.Drawing.Point(336, 19);
+            this.gbxAxisX1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbxAxisX1.Name = "gbxAxisX1";
+            this.gbxAxisX1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbxAxisX1.Size = new System.Drawing.Size(316, 356);
+            this.gbxAxisX1.TabIndex = 4;
+            this.gbxAxisX1.TabStop = false;
+            this.gbxAxisX1.Text = "AxisX1";
             // 
             // btnStopAxisX1
             // 
@@ -119,7 +133,8 @@ namespace BRCommTest
             // 
             // btnResetAxisX1
             // 
-            this.btnResetAxisX1.Location = new System.Drawing.Point(375, 286);
+            this.btnResetAxisX1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnResetAxisX1.Location = new System.Drawing.Point(216, 285);
             this.btnResetAxisX1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnResetAxisX1.Name = "btnResetAxisX1";
             this.btnResetAxisX1.Size = new System.Drawing.Size(90, 61);
@@ -143,9 +158,10 @@ namespace BRCommTest
             // 
             // chkEnabledAxisX1
             // 
+            this.chkEnabledAxisX1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.chkEnabledAxisX1.AutoSize = true;
             this.chkEnabledAxisX1.Enabled = false;
-            this.chkEnabledAxisX1.Location = new System.Drawing.Point(375, 29);
+            this.chkEnabledAxisX1.Location = new System.Drawing.Point(209, 27);
             this.chkEnabledAxisX1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkEnabledAxisX1.Name = "chkEnabledAxisX1";
             this.chkEnabledAxisX1.Size = new System.Drawing.Size(97, 24);
@@ -211,13 +227,15 @@ namespace BRCommTest
             // 
             // lblStatus
             // 
+            this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(19, 654);
+            this.lblStatus.Location = new System.Drawing.Point(13, 476);
             this.lblStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(44, 20);
             this.lblStatus.TabIndex = 5;
             this.lblStatus.Text = "Error";
+            this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tmrWaitFormLoad
             // 
@@ -270,30 +288,183 @@ namespace BRCommTest
             this.btnStructReader.UseVisualStyleBackColor = true;
             this.btnStructReader.Click += new System.EventHandler(this.btnStructReader_Click);
             // 
+            // gbxAxisX2
+            // 
+            this.gbxAxisX2.Controls.Add(this.button3);
+            this.gbxAxisX2.Controls.Add(this.label4);
+            this.gbxAxisX2.Controls.Add(this.label5);
+            this.gbxAxisX2.Controls.Add(this.label6);
+            this.gbxAxisX2.Controls.Add(this.button4);
+            this.gbxAxisX2.Controls.Add(this.button5);
+            this.gbxAxisX2.Controls.Add(this.checkBox1);
+            this.gbxAxisX2.Controls.Add(this.button6);
+            this.gbxAxisX2.Controls.Add(this.textBox2);
+            this.gbxAxisX2.Controls.Add(this.textBox3);
+            this.gbxAxisX2.Controls.Add(this.txtActPosAxisX2);
+            this.gbxAxisX2.Controls.Add(this.button7);
+            this.gbxAxisX2.Location = new System.Drawing.Point(670, 19);
+            this.gbxAxisX2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbxAxisX2.Name = "gbxAxisX2";
+            this.gbxAxisX2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbxAxisX2.Size = new System.Drawing.Size(316, 356);
+            this.gbxAxisX2.TabIndex = 14;
+            this.gbxAxisX2.TabStop = false;
+            this.gbxAxisX2.Text = "AxisX2";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(108, 215);
+            this.button3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(90, 61);
+            this.button3.TabIndex = 13;
+            this.button3.Text = "STOP";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(206, 58);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(85, 20);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "Actuel Pos";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(206, 108);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(78, 20);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "Move Pos";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(206, 158);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(56, 20);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "mm/sn";
+            // 
+            // button4
+            // 
+            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button4.Location = new System.Drawing.Point(216, 285);
+            this.button4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(90, 61);
+            this.button4.TabIndex = 9;
+            this.button4.Text = "RST";
+            this.button4.UseVisualStyleBackColor = true;
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(9, 286);
+            this.button5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(90, 61);
+            this.button5.TabIndex = 8;
+            this.button5.Text = "JOG -";
+            this.button5.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Enabled = false;
+            this.checkBox1.Location = new System.Drawing.Point(209, 27);
+            this.checkBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(97, 24);
+            this.checkBox1.TabIndex = 7;
+            this.checkBox1.Text = "Powered";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(9, 215);
+            this.button6.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(90, 61);
+            this.button6.TabIndex = 6;
+            this.button6.Text = "MOVE";
+            this.button6.UseVisualStyleBackColor = true;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.textBox2.Location = new System.Drawing.Point(24, 145);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(170, 35);
+            this.textBox2.TabIndex = 3;
+            this.textBox2.Text = "10";
+            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // textBox3
+            // 
+            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.textBox3.Location = new System.Drawing.Point(24, 95);
+            this.textBox3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(170, 35);
+            this.textBox3.TabIndex = 2;
+            this.textBox3.Text = "100";
+            this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // txtActPosAxisX2
+            // 
+            this.txtActPosAxisX2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtActPosAxisX2.Location = new System.Drawing.Point(24, 45);
+            this.txtActPosAxisX2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtActPosAxisX2.Name = "txtActPosAxisX2";
+            this.txtActPosAxisX2.ReadOnly = true;
+            this.txtActPosAxisX2.Size = new System.Drawing.Size(170, 35);
+            this.txtActPosAxisX2.TabIndex = 1;
+            this.txtActPosAxisX2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(107, 286);
+            this.button7.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(90, 61);
+            this.button7.TabIndex = 0;
+            this.button7.Text = "JOG +";
+            this.button7.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1200, 692);
+            this.Controls.Add(this.gbxAxisX2);
             this.Controls.Add(this.btnStructReader);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.lblStatus);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.gbxAxisX1);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.gbxAxisX1.ResumeLayout(false);
+            this.gbxAxisX1.PerformLayout();
+            this.gbxAxisX2.ResumeLayout(false);
+            this.gbxAxisX2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox gbxAxisX1;
         private System.Windows.Forms.TextBox txtActPosAxisX1;
         private System.Windows.Forms.Button btnJogPlusX1;
         private System.Windows.Forms.Label lblStatus;
@@ -313,6 +484,19 @@ namespace BRCommTest
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button btnStructReader;
+        private System.Windows.Forms.GroupBox gbxAxisX2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txtActPosAxisX2;
+        private System.Windows.Forms.Button button7;
     }
 }
 

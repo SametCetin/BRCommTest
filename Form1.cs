@@ -41,58 +41,61 @@ namespace BRCommTest
             }
         }
 
-        private void tmrVisuUpdate_Tick(object sender, EventArgs e)
+        private async void tmrVisuUpdate_Tick(object sender, EventArgs e)
         {
-            chkEnabledAxisX1.Checked = PlcComm.Vars.HMI.Axis[0].Enabled;
-            txtActPosAxisX1.Text = PlcComm.Vars.HMI.Axis[0].ActPos.ToString();
-            
+            tmrVisuUpdate.Stop();
 
+            var res = await PlcComm.ReadLreal("HMI.Axis[0].ActPos");
+            txtActPosAxisX1.Text = res.Item2.ToString();
+
+            res = await PlcComm.ReadLreal("HMI.Axis[1].ActPos");
+            txtActPosAxisX2.Text = res.Item2.ToString();
+
+            tmrVisuUpdate.Start();
         }
 
         private void btnJogPlusX1_MouseDown(object sender, MouseEventArgs e)
         {
-            PlcComm.Vars.HMI.Axis[0].JogVelo = Convert.ToDouble(txtMoveVeloAxisX1.Text);
-            PlcComm.Vars.HMI.Axis[0].JogPlus = PlcComm.Vars.HMI.Axis[0].Enabled;
+            PlcComm.Write("HMI.Axis[0].JogPlus");
         }
 
         private void btnJogPlusX1_MouseUp(object sender, MouseEventArgs e)
         {
-            PlcComm.Vars.HMI.Axis[0].JogPlus = false;
         }
 
         private void btnJogMinAxisX1_MouseDown(object sender, MouseEventArgs e)
         {
-            PlcComm.Vars.HMI.Axis[0].JogVelo = Convert.ToDouble(txtMoveVeloAxisX1.Text);
-            PlcComm.Vars.HMI.Axis[0].JogMinus = PlcComm.Vars.HMI.Axis[0].Enabled;
+            
         }
 
         private void btnJogMinAxisX1_MouseUp(object sender, MouseEventArgs e)
         {
-            PlcComm.Vars.HMI.Axis[0].JogMinus = false;
+            
         }
 
         private void btnResetAxisX1_MouseDown(object sender, MouseEventArgs e)
         {
-            PlcComm.Vars.HMI.Axis[0].Reset = true;
+            
         }
 
         private void btnResetAxisX1_MouseUp(object sender, MouseEventArgs e)
         {
-            PlcComm.Vars.HMI.Axis[0].Reset = false;
+           
         }
 
-        
 
-        private void btnMovePosAxisX1_Click(object sender, EventArgs e)
+
+        TaskCompletionSource<bool> tcs2 = null;
+        private async void btnMovePosAxisX1_Click(object sender, EventArgs e)
         {
-            PlcComm.Vars.HMI.Axis[0].SetPos = Convert.ToDouble(txtGoToPosAxisX1.Text);
-            PlcComm.Vars.HMI.Axis[0].SetVelo = Convert.ToDouble(txtMoveVeloAxisX1.Text);
-            PlcComm.Vars.HMI.Axis[0].MoveSetPos = PlcComm.Vars.HMI.Axis[0].Enabled && !PlcComm.Vars.HMI.Axis[0].MoveSetPos;
+            tcs2 = new TaskCompletionSource<bool>();
+            await tcs2.Task;
+            MessageBox.Show("aaaaa");
         }
 
         private void btnStopAxisX1_Click(object sender, EventArgs e)
         {
-            PlcComm.Vars.HMI.Axis[0].MoveSetPos = false;
+            tcs2?.TrySetResult(true);
         }
 
         
@@ -100,11 +103,12 @@ namespace BRCommTest
         {
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
-            PlcComm.Read(textBox1.Text);
-
-            MessageBox.Show(PlcComm.PlcValue);
+            
+            var res = await PlcComm.ReadUint(textBox1.Text);
+            
+            MessageBox.Show(res.Item1.ToString() + "|" + res.Item2.ToString());
         }
 
    
@@ -133,6 +137,5 @@ namespace BRCommTest
         {
             PlcComm.ConnectToPvi("127.0.0.1");
         }
-
     }
 }

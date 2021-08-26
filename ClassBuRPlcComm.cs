@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
+using Exception = System.Exception;
 
 namespace BRCommTest
 {
@@ -21,6 +23,12 @@ namespace BRCommTest
         TaskCompletionSource<bool> tcsReadLreal = null;
         System.Windows.Forms.Timer tmrReadValToutLreal;
 
+        bool WriteValDoneBool;
+        bool WriteValBool;
+        BR.AN.PviServices.Variable BRPlcVarWriteBool;
+        TaskCompletionSource<bool> tcsWriteBool = null;
+        System.Windows.Forms.Timer tmrWriteValToutBool;
+
 
         System.Windows.Forms.Timer tmrConnectPviTimeOut;
         System.Windows.Forms.Timer tmrWriteToPlcTimeOut;
@@ -32,10 +40,9 @@ namespace BRCommTest
         bool WriteToPlcDone;
         
         string DestAddress = "127.0.0.1";
-        string PlcVarVal = "";
 
         BR.AN.PviServices.Service BRService;
-        BR.AN.PviServices.Cpu BRCpu;
+        public BR.AN.PviServices.Cpu BRCpu;
         
         BR.AN.PviServices.Variable BRPlcVarWr;
 
@@ -55,12 +62,21 @@ namespace BRCommTest
                 if (BRPlcVarLreal != null)
                     BRPlcVarLreal.Disconnect();
                 if (tmrReadValToutLreal != null)
-                    tmrReadValToutUint.Stop();
+                    tmrReadValToutLreal.Stop();
+
+                if (BRPlcVarWriteBool != null)
+                    BRPlcVarWriteBool.Disconnect();
+                if (tmrWriteValToutBool != null)
+                    tmrWriteValToutBool.Stop();
+
 
                 if (BRPlcVarWr != null)
                     BRPlcVarWr.Disconnect();
                 if (BRCpu != null)
+                {
+                    BRCpu.Variables.Disconnect();
                     BRCpu.Disconnect();
+                }
                 if (BRService != null)
                     BRService.Disconnect();
 
@@ -74,7 +90,7 @@ namespace BRCommTest
         {
             tmrConnectPviTimeOut = new System.Windows.Forms.Timer();
             tmrConnectPviTimeOut.Tick += tmrConnectPviTimeOut_Tick;
-            tmrConnectPviTimeOut.Interval = 8000;
+            tmrConnectPviTimeOut.Interval = 20000;
             tmrConnectPviTimeOut.Start();
 
             DestAddress = destAddress;
@@ -124,6 +140,10 @@ namespace BRCommTest
         {
             ConnectToPviDone = true;
             WaitConnectToPvi = false;
+
+            BRCpu.Variables.Connect();
+            BRCpu.Variables.Active = true;
+
         }
 
         public bool CheckConnection()
@@ -200,13 +220,25 @@ namespace BRCommTest
         //----------------------------------------
         // LREAL okuma
         //----------------------------------------
-        public async System.Threading.Tasks.Task<(bool, Double)> ReadLreal(string VarName)
+        public bool ReadLreal(string VarName, out double val)
         {
-            ReadValLreal = 0;
+            val = 0;
+
             ReadValDoneLreal = false;
+            ReadValLreal = 0;
 
             if (BRCpu == null)
-                return (ReadValDoneLreal, ReadValLreal);
+                return false;
+
+            ReadLrealOpr(VarName).Wait(400);
+
+            val = ReadValLreal;
+            return ReadValDoneLreal;
+        }
+
+        private async Task<bool> ReadLrealOpr(string VarName)
+        {
+            bool retval = false;
 
             try
             {
@@ -218,13 +250,14 @@ namespace BRCommTest
             }
             catch
             {
-                return (ReadValDoneLreal, ReadValLreal);
+                return retval;
             }
 
             tmrReadValToutLreal = new System.Windows.Forms.Timer();
             tmrReadValToutLreal.Tick += tmrReadValToutLreal_tick;
             tmrReadValToutLreal.Interval = 2000;
             tmrReadValToutLreal.Start();
+
 
             tcsReadLreal = new TaskCompletionSource<bool>();
             await tcsReadLreal.Task;
@@ -234,9 +267,9 @@ namespace BRCommTest
                 BRPlcVarLreal.Disconnect();
                 BRPlcVarLreal.Dispose();
             }
-            BRPlcVarLreal = null;
 
-            return (ReadValDoneLreal, ReadValLreal);
+            BRPlcVarLreal = null;
+            return true;
         }
 
         private void BRPlcVarLreal_ValueRead(object sender, PviEventArgs e)
@@ -259,6 +292,69 @@ namespace BRCommTest
             tmrReadValToutLreal.Stop();
             tcsReadLreal?.TrySetResult(true);
         }
+
+
+        //----------------------------------------
+        // Bool Yazma
+        //----------------------------------------
+        public async System.Threading.Tasks.Task<bool> WriteBool(string varName, bool val)
+        {
+            WriteValBool = val;
+            WriteValDoneBool = false;
+
+            if (BRCpu == null)
+                return (WriteValDoneBool);
+
+            if (BRPlcVarWriteBool != null) {
+                BRPlcVarWriteBool.Disconnect();
+                BRPlcVarWriteBool.Dispose();
+            }
+
+            try
+            {
+                BRPlcVarWriteBool = new Variable(BRCpu, varName);
+                BRPlcVarWriteBool.ValueWritten += new PviEventHandler(BRPlcVarWriteBool_ValueWritten);
+                BRPlcVarWriteBool.Error += new PviEventHandler(BRPlcVarWriteBool_Error);
+                BRPlcVarWriteBool.Value = val;
+                BRPlcVarWriteBool.WriteValue();
+                //BRPlcVarWriteBool.Connect();
+            }
+            catch(Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show(e.Message);
+                return WriteValDoneBool;
+            }
+
+            tmrWriteValToutBool = new System.Windows.Forms.Timer();
+            tmrWriteValToutBool.Tick += tmrWriteValToutBool_tick;
+            tmrWriteValToutBool.Interval = 2000;
+            tmrWriteValToutBool.Start();
+
+            tcsWriteBool = new TaskCompletionSource<bool>();
+            await tcsWriteBool.Task;
+
+            return (WriteValDoneBool);
+        }
+
+        private void BRPlcVarWriteBool_ValueWritten(object sender, PviEventArgs e)
+        {
+            tmrWriteValToutBool.Stop();
+            WriteValDoneBool = true;
+            tcsWriteBool?.TrySetResult(true);
+        }
+
+        private void BRPlcVarWriteBool_Error(object sender, PviEventArgs e)
+        {
+            tmrWriteValToutBool.Stop();
+            tcsWriteBool?.TrySetResult(true);
+        }
+
+        private void tmrWriteValToutBool_tick(object sender, EventArgs e)
+        {
+            tmrWriteValToutBool.Stop();
+            tcsWriteBool?.TrySetResult(true);
+        }
+
         //----------------------------------------
         // LREAL okuma
         //----------------------------------------
@@ -350,5 +446,10 @@ namespace BRCommTest
             WaitWriteToPlc = false;
         }
 
+        
     }
+
+
+
+
 }

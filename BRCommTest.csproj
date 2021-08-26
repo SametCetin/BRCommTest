@@ -96,6 +96,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BnrComm.cs" />
     <Compile Include="ClassBuRPlcComm.cs" />
     <Compile Include="ClassPlcVars.cs" />
     <Compile Include="Form1.cs">

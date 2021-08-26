@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using BR.AN.PviServices;
+using Task = System.Threading.Tasks.Task;
 
 namespace BRCommTest
 {
@@ -27,8 +28,6 @@ namespace BRCommTest
 
         }
 
-        
-
         private void Wait(int ms)
         {
             if (ms < 10)
@@ -44,33 +43,41 @@ namespace BRCommTest
         private async void tmrVisuUpdate_Tick(object sender, EventArgs e)
         {
             tmrVisuUpdate.Stop();
-
-            var res = await PlcComm.ReadLreal("HMI.Axis[0].ActPos");
-            txtActPosAxisX1.Text = res.Item2.ToString();
-
-            res = await PlcComm.ReadLreal("HMI.Axis[1].ActPos");
-            txtActPosAxisX2.Text = res.Item2.ToString();
-
+            BnrComm br = new BnrComm();
+            var val = await br.ReadLreal(PlcComm.BRCpu, "HMI.Axis[0].ActPos");
+            txtActPosAxisX1.Text = val.Item2.ToString();
             tmrVisuUpdate.Start();
         }
 
-        private void btnJogPlusX1_MouseDown(object sender, MouseEventArgs e)
+        private async void btnJogPlusX1_MouseDown(object sender, MouseEventArgs e)
         {
-            PlcComm.Write("HMI.Axis[0].JogPlus");
+
+            BnrComm br1 = new BnrComm();
+            var val = await br1.WriteUint(PlcComm.BRCpu, "HMI.Axis[0].JogVelo", Convert.ToUInt16(txtMoveVeloAxisX1.Text));
+
+            BnrComm br2 = new BnrComm();
+            await br2.WriteBool(PlcComm.BRCpu, "HMI.Axis[0].JogPlus", true);
         }
 
-        private void btnJogPlusX1_MouseUp(object sender, MouseEventArgs e)
+        private async void btnJogPlusX1_MouseUp(object sender, MouseEventArgs e)
         {
+            BnrComm br2 = new BnrComm();
+            await br2.WriteBool(PlcComm.BRCpu, "HMI.Axis[0].JogPlus", false);
         }
 
-        private void btnJogMinAxisX1_MouseDown(object sender, MouseEventArgs e)
+        private async void btnJogMinAxisX1_MouseDown(object sender, MouseEventArgs e)
         {
-            
+            BnrComm br1 = new BnrComm();
+            var val = await br1.WriteUint(PlcComm.BRCpu, "HMI.Axis[0].JogVelo", Convert.ToUInt16(txtMoveVeloAxisX1.Text));
+
+            BnrComm br2 = new BnrComm();
+            await br2.WriteBool(PlcComm.BRCpu, "HMI.Axis[0].JogMinus", true);
         }
 
-        private void btnJogMinAxisX1_MouseUp(object sender, MouseEventArgs e)
+        private async void btnJogMinAxisX1_MouseUp(object sender, MouseEventArgs e)
         {
-            
+            BnrComm br2 = new BnrComm();
+            await br2.WriteBool(PlcComm.BRCpu, "HMI.Axis[0].JogMinus", false);
         }
 
         private void btnResetAxisX1_MouseDown(object sender, MouseEventArgs e)
@@ -82,8 +89,6 @@ namespace BRCommTest
         {
            
         }
-
-
 
         TaskCompletionSource<bool> tcs2 = null;
         private async void btnMovePosAxisX1_Click(object sender, EventArgs e)
@@ -98,23 +103,37 @@ namespace BRCommTest
             tcs2?.TrySetResult(true);
         }
 
-        
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
+            BnrComm br = new BnrComm();
+            var val = await br.ReadString(PlcComm.BRCpu, "strvar1");
+            //var val = await br.ReadBoolArray(PlcComm.BRCpu, "Alarm", 201);
+
+            MessageBox.Show(val.Item2);
         }
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            
-            var res = await PlcComm.ReadUint(textBox1.Text);
-            
-            MessageBox.Show(res.Item1.ToString() + "|" + res.Item2.ToString());
+            BnrComm br = new BnrComm();
+            var val = await br.WriteString(PlcComm.BRCpu, "strvar1", textBox1.Text);
+            //MessageBox.Show(delFirstDot(textBox1.Text));   
         }
 
-   
+        private string delFirstDot(string varName)
+        {
+            if (varName.Substring(0, 1) == ".")
+                varName = varName.Substring(1, varName.Length - 1);
+            return varName;
+        }
+
+        private async Task<bool> TestTask()
+        {
+
+            return true;
+        }
         private void btnStructReader_Click(object sender, EventArgs e)
         {
-            tmrWaitFormLoad.Interval = 10;
+            tmrWaitFormLoad.Interval = 100;
             tmrWaitFormLoad.Start();
         }
 
@@ -128,6 +147,7 @@ namespace BRCommTest
             {
                 lblStatus.Text = "Plc OK";
                 tmrVisuUpdate.Start();
+                tmrVisuUpdate2.Start();
             }
             else
                 lblStatus.Text = "Plc not connected";
@@ -136,6 +156,66 @@ namespace BRCommTest
         private void ConnectToPlc()
         {
             PlcComm.ConnectToPvi("127.0.0.1");
+        }
+
+        private async void tmrVisuUpdate2_Tick(object sender, EventArgs e)
+        {
+            tmrVisuUpdate2.Stop();
+
+            BnrComm br = new BnrComm();
+            var val = await br.ReadLreal(PlcComm.BRCpu, "HMI.Axis[1].ActPos");
+            //var val = await PlcComm.ReadLreal("HMI.Axis[1].ActPos");
+            txtActPosAxisZ1.Text = val.Item2.ToString();
+            tmrVisuUpdate2.Start();
+        }
+
+        private async void btnJogMinusZ1_MouseDown(object sender, MouseEventArgs e)
+        {
+            BnrComm br1 = new BnrComm();
+            var val = await br1.WriteUint(PlcComm.BRCpu, "HMI.Axis[1].JogVelo", Convert.ToUInt16(txtMoveVeloAxisZ1.Text));
+
+            BnrComm br2 = new BnrComm();
+            await br2.WriteBool(PlcComm.BRCpu, "HMI.Axis[1].JogMinus", true);
+
+        }
+
+        private async void btnJogMinusZ1_MouseUp(object sender, MouseEventArgs e)
+        {
+            BnrComm br2 = new BnrComm();
+            await br2.WriteBool(PlcComm.BRCpu, "HMI.Axis[1].JogMinus", false);
+        }
+
+        private async void btnJogPlusZ1_MouseDown(object sender, MouseEventArgs e)
+        {
+            BnrComm br1 = new BnrComm();
+            var val = await br1.WriteUint(PlcComm.BRCpu, "HMI.Axis[1].JogVelo", Convert.ToUInt16(txtMoveVeloAxisZ1.Text));
+
+            BnrComm br2 = new BnrComm();
+            await br2.WriteBool(PlcComm.BRCpu, "HMI.Axis[1].JogPlus", true);
+        }
+
+        private async void btnJogPlusZ1_MouseUp(object sender, MouseEventArgs e)
+        {
+            BnrComm br2 = new BnrComm();
+            await br2.WriteBool(PlcComm.BRCpu, "HMI.Axis[1].JogPlus", false);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            bool[] arr1 = new bool[200];
+            bool[] arr2 = new bool[200];
+
+            for(int i=0;i<10;i++)
+            {
+                arr1[i] = true;
+            }
+
+            for (int i=0;i<arr2.Length-1;i++)
+            {
+                    arr2[i+1] = arr1[i];
+            }
+           
+            MessageBox.Show("done");
         }
     }
 }

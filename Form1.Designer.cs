@@ -50,21 +50,23 @@ namespace BRCommTest
             this.button2 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btnStructReader = new System.Windows.Forms.Button();
-            this.gbxAxisX2 = new System.Windows.Forms.GroupBox();
+            this.gbxAxisZ1 = new System.Windows.Forms.GroupBox();
             this.button3 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
+            this.btnJogMinusZ1 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button6 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtMoveVeloAxisZ1 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
-            this.txtActPosAxisX2 = new System.Windows.Forms.TextBox();
-            this.button7 = new System.Windows.Forms.Button();
+            this.txtActPosAxisZ1 = new System.Windows.Forms.TextBox();
+            this.btnJogPlusZ1 = new System.Windows.Forms.Button();
+            this.tmrVisuUpdate2 = new System.Windows.Forms.Timer(this.components);
+            this.button5 = new System.Windows.Forms.Button();
             this.gbxAxisX1.SuspendLayout();
-            this.gbxAxisX2.SuspendLayout();
+            this.gbxAxisZ1.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbxAxisX1
@@ -229,7 +231,7 @@ namespace BRCommTest
             // 
             this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(13, 476);
+            this.lblStatus.Location = new System.Drawing.Point(13, 477);
             this.lblStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(44, 20);
@@ -288,28 +290,28 @@ namespace BRCommTest
             this.btnStructReader.UseVisualStyleBackColor = true;
             this.btnStructReader.Click += new System.EventHandler(this.btnStructReader_Click);
             // 
-            // gbxAxisX2
+            // gbxAxisZ1
             // 
-            this.gbxAxisX2.Controls.Add(this.button3);
-            this.gbxAxisX2.Controls.Add(this.label4);
-            this.gbxAxisX2.Controls.Add(this.label5);
-            this.gbxAxisX2.Controls.Add(this.label6);
-            this.gbxAxisX2.Controls.Add(this.button4);
-            this.gbxAxisX2.Controls.Add(this.button5);
-            this.gbxAxisX2.Controls.Add(this.checkBox1);
-            this.gbxAxisX2.Controls.Add(this.button6);
-            this.gbxAxisX2.Controls.Add(this.textBox2);
-            this.gbxAxisX2.Controls.Add(this.textBox3);
-            this.gbxAxisX2.Controls.Add(this.txtActPosAxisX2);
-            this.gbxAxisX2.Controls.Add(this.button7);
-            this.gbxAxisX2.Location = new System.Drawing.Point(670, 19);
-            this.gbxAxisX2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gbxAxisX2.Name = "gbxAxisX2";
-            this.gbxAxisX2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gbxAxisX2.Size = new System.Drawing.Size(316, 356);
-            this.gbxAxisX2.TabIndex = 14;
-            this.gbxAxisX2.TabStop = false;
-            this.gbxAxisX2.Text = "AxisX2";
+            this.gbxAxisZ1.Controls.Add(this.button3);
+            this.gbxAxisZ1.Controls.Add(this.label4);
+            this.gbxAxisZ1.Controls.Add(this.label5);
+            this.gbxAxisZ1.Controls.Add(this.label6);
+            this.gbxAxisZ1.Controls.Add(this.button4);
+            this.gbxAxisZ1.Controls.Add(this.btnJogMinusZ1);
+            this.gbxAxisZ1.Controls.Add(this.checkBox1);
+            this.gbxAxisZ1.Controls.Add(this.button6);
+            this.gbxAxisZ1.Controls.Add(this.txtMoveVeloAxisZ1);
+            this.gbxAxisZ1.Controls.Add(this.textBox3);
+            this.gbxAxisZ1.Controls.Add(this.txtActPosAxisZ1);
+            this.gbxAxisZ1.Controls.Add(this.btnJogPlusZ1);
+            this.gbxAxisZ1.Location = new System.Drawing.Point(670, 19);
+            this.gbxAxisZ1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbxAxisZ1.Name = "gbxAxisZ1";
+            this.gbxAxisZ1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbxAxisZ1.Size = new System.Drawing.Size(316, 356);
+            this.gbxAxisZ1.TabIndex = 14;
+            this.gbxAxisZ1.TabStop = false;
+            this.gbxAxisZ1.Text = "AxisZ1";
             // 
             // button3
             // 
@@ -362,15 +364,17 @@ namespace BRCommTest
             this.button4.Text = "RST";
             this.button4.UseVisualStyleBackColor = true;
             // 
-            // button5
+            // btnJogMinusZ1
             // 
-            this.button5.Location = new System.Drawing.Point(9, 286);
-            this.button5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(90, 61);
-            this.button5.TabIndex = 8;
-            this.button5.Text = "JOG -";
-            this.button5.UseVisualStyleBackColor = true;
+            this.btnJogMinusZ1.Location = new System.Drawing.Point(9, 286);
+            this.btnJogMinusZ1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnJogMinusZ1.Name = "btnJogMinusZ1";
+            this.btnJogMinusZ1.Size = new System.Drawing.Size(90, 61);
+            this.btnJogMinusZ1.TabIndex = 8;
+            this.btnJogMinusZ1.Text = "JOG -";
+            this.btnJogMinusZ1.UseVisualStyleBackColor = true;
+            this.btnJogMinusZ1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnJogMinusZ1_MouseDown);
+            this.btnJogMinusZ1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnJogMinusZ1_MouseUp);
             // 
             // checkBox1
             // 
@@ -395,16 +399,16 @@ namespace BRCommTest
             this.button6.Text = "MOVE";
             this.button6.UseVisualStyleBackColor = true;
             // 
-            // textBox2
+            // txtMoveVeloAxisZ1
             // 
-            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.textBox2.Location = new System.Drawing.Point(24, 145);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(170, 35);
-            this.textBox2.TabIndex = 3;
-            this.textBox2.Text = "10";
-            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtMoveVeloAxisZ1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.txtMoveVeloAxisZ1.Location = new System.Drawing.Point(24, 145);
+            this.txtMoveVeloAxisZ1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtMoveVeloAxisZ1.Name = "txtMoveVeloAxisZ1";
+            this.txtMoveVeloAxisZ1.Size = new System.Drawing.Size(170, 35);
+            this.txtMoveVeloAxisZ1.TabIndex = 3;
+            this.txtMoveVeloAxisZ1.Text = "10";
+            this.txtMoveVeloAxisZ1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // textBox3
             // 
@@ -417,33 +421,50 @@ namespace BRCommTest
             this.textBox3.Text = "100";
             this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
-            // txtActPosAxisX2
+            // txtActPosAxisZ1
             // 
-            this.txtActPosAxisX2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtActPosAxisX2.Location = new System.Drawing.Point(24, 45);
-            this.txtActPosAxisX2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.txtActPosAxisX2.Name = "txtActPosAxisX2";
-            this.txtActPosAxisX2.ReadOnly = true;
-            this.txtActPosAxisX2.Size = new System.Drawing.Size(170, 35);
-            this.txtActPosAxisX2.TabIndex = 1;
-            this.txtActPosAxisX2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtActPosAxisZ1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtActPosAxisZ1.Location = new System.Drawing.Point(24, 45);
+            this.txtActPosAxisZ1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtActPosAxisZ1.Name = "txtActPosAxisZ1";
+            this.txtActPosAxisZ1.ReadOnly = true;
+            this.txtActPosAxisZ1.Size = new System.Drawing.Size(170, 35);
+            this.txtActPosAxisZ1.TabIndex = 1;
+            this.txtActPosAxisZ1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
-            // button7
+            // btnJogPlusZ1
             // 
-            this.button7.Location = new System.Drawing.Point(107, 286);
-            this.button7.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(90, 61);
-            this.button7.TabIndex = 0;
-            this.button7.Text = "JOG +";
-            this.button7.UseVisualStyleBackColor = true;
+            this.btnJogPlusZ1.Location = new System.Drawing.Point(107, 286);
+            this.btnJogPlusZ1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnJogPlusZ1.Name = "btnJogPlusZ1";
+            this.btnJogPlusZ1.Size = new System.Drawing.Size(90, 61);
+            this.btnJogPlusZ1.TabIndex = 0;
+            this.btnJogPlusZ1.Text = "JOG +";
+            this.btnJogPlusZ1.UseVisualStyleBackColor = true;
+            this.btnJogPlusZ1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnJogPlusZ1_MouseDown);
+            this.btnJogPlusZ1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnJogPlusZ1_MouseUp);
+            // 
+            // tmrVisuUpdate2
+            // 
+            this.tmrVisuUpdate2.Tick += new System.EventHandler(this.tmrVisuUpdate2_Tick);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(100, 127);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(123, 62);
+            this.button5.TabIndex = 15;
+            this.button5.Text = "button5";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 692);
-            this.Controls.Add(this.gbxAxisX2);
+            this.ClientSize = new System.Drawing.Size(1035, 554);
+            this.Controls.Add(this.button5);
+            this.Controls.Add(this.gbxAxisZ1);
             this.Controls.Add(this.btnStructReader);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button2);
@@ -456,8 +477,8 @@ namespace BRCommTest
             this.Load += new System.EventHandler(this.Form1_Load);
             this.gbxAxisX1.ResumeLayout(false);
             this.gbxAxisX1.PerformLayout();
-            this.gbxAxisX2.ResumeLayout(false);
-            this.gbxAxisX2.PerformLayout();
+            this.gbxAxisZ1.ResumeLayout(false);
+            this.gbxAxisZ1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -484,19 +505,21 @@ namespace BRCommTest
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button btnStructReader;
-        private System.Windows.Forms.GroupBox gbxAxisX2;
+        private System.Windows.Forms.GroupBox gbxAxisZ1;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button btnJogMinusZ1;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtMoveVeloAxisZ1;
         private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox txtActPosAxisX2;
-        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.TextBox txtActPosAxisZ1;
+        private System.Windows.Forms.Button btnJogPlusZ1;
+        private System.Windows.Forms.Timer tmrVisuUpdate2;
+        private System.Windows.Forms.Button button5;
     }
 }
 
